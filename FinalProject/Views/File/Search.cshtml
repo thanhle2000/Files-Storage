@@ -1,0 +1,48 @@
+﻿@using FinalProject.Models;
+@model IEnumerable<ObjFile>
+
+
+
+@using (@Html.BeginForm(null, null, FormMethod.Post,
+ new { enctype = "multipart/form-data" }))
+{
+    if (TempData["Message"] != null)
+    {
+
+        <p>@TempData["Message"]</p>
+    }
+    <table>
+        <tr>
+            <td>
+                <h2 style="color: #47bfed">SEARCHING FILES...</h2>
+            </td>
+        </tr>
+    </table>
+
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.File)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.File)
+            </td>
+            <th>
+                @Html.ActionLink("Download", "Download", new { fileName = item.File })
+            </th>
+        </tr>
+
+    }
+</table>
+<p>
+    @Html.ActionLink("Back to list","Index")
+</p>
+

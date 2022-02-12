@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FinalProject.Models.AllUserViewModel>
+<table class="table">
+    <thead>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(m => m.User.Id)
+            </td>
+            <td>
+                @Html.DisplayNameFor(m => m.User.UserName)
+            </td>
+            <td>
+                @Html.DisplayNameFor(m => m.User.Roles)
+            </td>
+
+            <td>
+                Action
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => item.User.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.User.UserName)
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => item.Roles, item.Roles)
+                </td>
+                <td>
+                    <button class="updatebutton">update</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.ActionLink("Back to List", "Index")
+@section scripts{
+    <script>
+        $("table tbody").on("click", ".updatebutton", function () {
+            var userId = $(this).closest("tr").find("td").eq(0).text().trim();
+            $.ajax({
+                url: "@Url.Action("UpdateRole")",
+                data: {
+                    UserId: userId,
+                    RoleId: $("#item_Roles").val()
+                },
+                success: function (data) {
+                    alert(data);
+                    location.reload(true);
+                }
+            });
+        });
+    </script>
+}  

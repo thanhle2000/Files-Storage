@@ -1,0 +1,98 @@
+﻿@using FinalProject.Models;
+@model IEnumerable<ObjFile>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="box-title">
+            <b>Secret Files upload and download</b>
+        </h3>
+    </div>
+    <div class="panel-footer">
+        <p class="box-title"><b>Total Files till @String.Format("{0 : dddd, MMMM d, yyyy}", DateTime.Now)  : </b><span class="label label-primary">@Model.Count()</span></p>
+    </div>
+    <div class="panel-footer">
+        <p class="box-title"><b>Microsoft Word Document: </b><span class="label label-primary">@Model.Where(x => x.Type.Contains("Microsoft Word Document")).Count()</span></p>
+
+
+        <p class="box-title"><b>Microsoft Excel Document: </b><span class="label label-primary">@Model.Where(x => x.Type.Contains("Microsoft Excel Document")).Count()</span></p>
+
+
+        <p class="box-title"><b>Text Document: </b><span class="label label-primary">@Model.Where(x => x.Type.Contains("Text Document")).Count()</span></p>
+
+
+        <p class="box-title"><b>PDF File: </b><span class="label label-primary">@Model.Where(x => x.Type.Contains("PDF File")).Count()</span></p>
+
+
+        <p class="box-title"><b>Video: </b><span class="label label-primary">@Model.Where(x => x.Type.Contains("Video")).Count()</span></p>
+
+
+        <p class="box-title"><b>Image: </b><span class="label label-primary">@Model.Where(x => x.Type.Contains("Image")).Count()</span></p>
+    </div>
+    <br />
+    @using (@Html.BeginForm(null, null, FormMethod.Post,
+     new { enctype = "multipart/form-data" }))
+    {
+        if (TempData["Message"] != null)
+        {
+
+            <p style="font-family: Arial; font-size: 16px; font-weight: 200; color: green">@TempData["Message"]</p>
+        }
+        <table>
+            <tr>
+                <td>
+                    <input type="file" name="files" id="files" multiple="multiple" />
+                </td>
+                <td>
+                    <input type="submit" class="btn" name="submit" />
+                </td>
+            </tr>
+
+        </table>
+
+    }
+    <br />
+    @using (Html.BeginForm("Search", "AdminFile", FormMethod.Get))
+    {
+        <input type="text" name="search" placeholder="Enter file name..." />
+        <input type="submit" name="submit" value="Search" />
+    }
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.File)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Size) (bytes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                Action
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.File)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <th>
+                    @Html.ActionLink("Download", "Download", new { fileName = item.File }) |
+                    @Html.ActionLink("Delete", "Delete", new { fileName = item.File }) |
+                    @Html.ActionLink("View", "ShowPdfInBrowser", new { fileName = item.File }) (only view PDF File)
+                </th>
+
+            </tr>
+
+        }
+    </table>
+</div>
